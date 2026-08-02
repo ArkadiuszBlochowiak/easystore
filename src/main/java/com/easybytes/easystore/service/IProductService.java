@@ -1,7 +1,6 @@
 package com.easybytes.easystore.service;
 
 import com.easybytes.easystore.dto.ProductDto;
-import com.easybytes.easystore.entity.Product;
 
 import java.util.List;
 
