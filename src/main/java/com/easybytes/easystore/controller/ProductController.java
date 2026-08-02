@@ -2,6 +2,7 @@ package com.easybytes.easystore.controller;
 
 import com.easybytes.easystore.entity.Product;
 import com.easybytes.easystore.repository.ProductRepository;
+import com.easybytes.easystore.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductRepository productRepository;
+    private final IProductService iProductService;
 
     @GetMapping
     public List<Product> getProducts() {
-        return productRepository.findAll();
+        return iProductService.getProducts();
     }
 }
