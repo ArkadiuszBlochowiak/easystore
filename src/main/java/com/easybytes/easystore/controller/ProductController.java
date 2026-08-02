@@ -1,5 +1,6 @@
 package com.easybytes.easystore.controller;
 
+import com.easybytes.easystore.dto.ProductDto;
 import com.easybytes.easystore.entity.Product;
 import com.easybytes.easystore.repository.ProductRepository;
 import com.easybytes.easystore.service.IProductService;
@@ -18,7 +19,7 @@ public class ProductController {
     private final IProductService iProductService;
 
     @GetMapping
-    public List<Product> getProducts() {
+    public List<ProductDto> getProducts() {
         return iProductService.getProducts();
     }
 }
