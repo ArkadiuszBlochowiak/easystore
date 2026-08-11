@@ -3,16 +3,14 @@ package com.easybytes.easystore.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,19 +31,4 @@ public class Product {
 
     @Column(name = "image_url", length = 500)
     private String imageUrl;
-
-    @ColumnDefault("current_timestamp")
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
-
-    @Column(name = "created_by", nullable = false, length = 20)
-    private String createdBy;
-
-    @ColumnDefault("null")
-    @Column(name = "updated_at")
-    private Instant updatedAt;
-
-    @ColumnDefault("null")
-    @Column(name = "updated_by", length = 20)
-    private String updatedBy;
 }
