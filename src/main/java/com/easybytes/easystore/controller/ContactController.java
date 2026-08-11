@@ -2,6 +2,7 @@ package com.easybytes.easystore.controller;
 
 import com.easybytes.easystore.dto.ContactRequestDto;
 import com.easybytes.easystore.service.IContactService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class ContactController {
     private final IContactService iContactService;
 
     @PostMapping
-    public ResponseEntity<String> saveContact(@RequestBody ContactRequestDto contactRequestDto) {
+    public ResponseEntity<String> saveContact(@Valid @RequestBody ContactRequestDto contactRequestDto) {
         iContactService.saveContact(contactRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("Request processed successfully");
     }
