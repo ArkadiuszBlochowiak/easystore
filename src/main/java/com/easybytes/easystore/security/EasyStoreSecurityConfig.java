@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class EasyStoreSecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         //options: permitAll, authenticated, denyAll, hasRole
+        http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests((requests) -> {
             publicPaths.forEach(path -> requests.requestMatchers(path).permitAll());
             requests.anyRequest().authenticated();
