@@ -21,6 +21,6 @@ public class RegisterRequestDto {
     private String mobileNumber;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 4, max = 20, message = "The length of the password should be between 5 and 20 characters")
+    @Size(min = 5, max = 20, message = "The length of the password should be between 5 and 20 characters")
     private String password;
 }

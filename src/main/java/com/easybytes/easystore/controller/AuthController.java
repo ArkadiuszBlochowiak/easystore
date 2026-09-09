@@ -57,7 +57,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid RegisterRequestDto registerRequestDto) {
+    public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
         inMemoryUserDetailsManager.createUser(new User(
                 registerRequestDto.getEmail(),
                 passwordEncoder.encode(registerRequestDto.getPassword()),
