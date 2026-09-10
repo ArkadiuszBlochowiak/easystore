@@ -19,7 +19,6 @@ import org.springframework.security.authentication.password.CompromisedPasswordC
 import org.springframework.security.authentication.password.CompromisedPasswordDecision;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,8 +46,8 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(loginRequestDto.username(), loginRequestDto.password())
             );
             var userDto = new UserDto();
-            var loggedUser = (User) authentication.getPrincipal();
-            userDto.setName(loggedUser.getUsername());
+            var loggedUser = (Customer) authentication.getPrincipal();
+            BeanUtils.copyProperties(loggedUser, userDto);
             String jwtToken = jwtUtil.generateJwtToken(authentication);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new LoginResponseDto(HttpStatus.OK.getReasonPhrase(), userDto, jwtToken)
