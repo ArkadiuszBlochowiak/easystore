@@ -1,6 +1,8 @@
 package com.easybytes.easystore.service.impl;
 
+import com.easybytes.easystore.dto.ProfileRequestDto;
 import com.easybytes.easystore.dto.ProfileResponseDto;
+import com.easybytes.easystore.entity.Address;
 import com.easybytes.easystore.entity.Customer;
 import com.easybytes.easystore.repository.CustomerRepository;
 import com.easybytes.easystore.service.IProfileService;
@@ -23,6 +25,31 @@ public class ProfileServiceImpl implements IProfileService {
         return mapCustomerToProfileResponseDto(customer);
     }
 
+    @Override
+    public ProfileResponseDto updateProfile(ProfileRequestDto profileRequestDto) {
+        Customer customer = getAuthenticatedCustomer();
+        boolean isEmailUpdated = !customer.getEmail().equals(profileRequestDto.getEmail().trim());
+
+        BeanUtils.copyProperties(profileRequestDto, customer);
+        Address address = customer.getAddress();
+        if (address == null) {
+            address = new Address();
+            address.setCustomer(customer);
+        }
+        address.setStreet(profileRequestDto.getStreet());
+        address.setCity(profileRequestDto.getCity());
+        address.setState(profileRequestDto.getState());
+        address.setPostalCode(profileRequestDto.getPostalCode());
+        address.setCountry(profileRequestDto.getCountry());
+
+        customer.setAddress(address);
+        customer = customerRepository.save(customer);
+
+        ProfileResponseDto profileResponseDto = mapCustomerToProfileResponseDto(customer);
+        profileResponseDto.setEmailUpdated(isEmailUpdated);
+        return profileResponseDto;
+    }
+
     private Customer getAuthenticatedCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -33,6 +60,15 @@ public class ProfileServiceImpl implements IProfileService {
     private ProfileResponseDto mapCustomerToProfileResponseDto(Customer customer) {
         ProfileResponseDto profileResponseDto = new ProfileResponseDto();
         BeanUtils.copyProperties(customer, profileResponseDto);
+
+        if (customer.getAddress() != null) {
+            profileResponseDto.setStreet(customer.getAddress().getStreet());
+            profileResponseDto.setCity(customer.getAddress().getCity());
+            profileResponseDto.setState(customer.getAddress().getState());
+            profileResponseDto.setPostalCode(customer.getAddress().getPostalCode());
+            profileResponseDto.setCountry(customer.getAddress().getCountry());
+        }
+        
         return profileResponseDto;
     }
 }

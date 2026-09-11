@@ -13,7 +13,7 @@ public class ProfileResponseDto {
     private String street;
     private String city;
     private String state;
-    private String PostalCode;
+    private String postalCode;
     private String country;
     private boolean emailUpdated;
 }
