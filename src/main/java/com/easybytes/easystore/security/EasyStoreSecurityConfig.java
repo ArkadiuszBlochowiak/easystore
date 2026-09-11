@@ -43,7 +43,7 @@ public class EasyStoreSecurityConfig {
             requests.anyRequest().authenticated();
         });
 
-        http.addFilterBefore(new JWTTokenValidationFilter(), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new JWTTokenValidationFilter(publicPaths), BasicAuthenticationFilter.class);
         http.formLogin(withDefaults());
         http.httpBasic(withDefaults());
         return http.build();
