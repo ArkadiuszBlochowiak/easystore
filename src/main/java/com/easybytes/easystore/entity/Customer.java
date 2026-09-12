@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -28,4 +31,8 @@ public class Customer extends BaseEntity {
 
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Address address;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Set<Role> roles = new LinkedHashSet<>();
 }
