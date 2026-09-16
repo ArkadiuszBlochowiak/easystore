@@ -1,5 +1,6 @@
 package com.easybytes.easystore.service.impl;
 
+import com.easybytes.easystore.dto.AddressDto;
 import com.easybytes.easystore.dto.ProfileRequestDto;
 import com.easybytes.easystore.dto.ProfileResponseDto;
 import com.easybytes.easystore.entity.Address;
@@ -62,13 +63,11 @@ public class ProfileServiceImpl implements IProfileService {
         BeanUtils.copyProperties(customer, profileResponseDto);
 
         if (customer.getAddress() != null) {
-            profileResponseDto.setStreet(customer.getAddress().getStreet());
-            profileResponseDto.setCity(customer.getAddress().getCity());
-            profileResponseDto.setState(customer.getAddress().getState());
-            profileResponseDto.setPostalCode(customer.getAddress().getPostalCode());
-            profileResponseDto.setCountry(customer.getAddress().getCountry());
+            AddressDto addressDto = new AddressDto();
+            BeanUtils.copyProperties(customer.getAddress(), addressDto);
+            profileResponseDto.setAddress(addressDto);
         }
-        
+
         return profileResponseDto;
     }
 }

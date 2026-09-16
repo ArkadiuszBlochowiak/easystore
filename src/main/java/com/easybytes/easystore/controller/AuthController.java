@@ -1,9 +1,6 @@
 package com.easybytes.easystore.controller;
 
-import com.easybytes.easystore.dto.LoginRequestDto;
-import com.easybytes.easystore.dto.LoginResponseDto;
-import com.easybytes.easystore.dto.RegisterRequestDto;
-import com.easybytes.easystore.dto.UserDto;
+import com.easybytes.easystore.dto.*;
 import com.easybytes.easystore.entity.Customer;
 import com.easybytes.easystore.entity.Role;
 import com.easybytes.easystore.repository.CustomerRepository;
@@ -52,6 +49,8 @@ public class AuthController {
 
             var userDto = new UserDto();
             var loggedUser = (Customer) authentication.getPrincipal();
+            String jwtToken = jwtUtil.generateJwtToken(authentication);
+
             BeanUtils.copyProperties(loggedUser, userDto);
             userDto.setRoles(authentication
                     .getAuthorities()
@@ -59,7 +58,12 @@ public class AuthController {
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.joining(","))
             );
-            String jwtToken = jwtUtil.generateJwtToken(authentication);
+
+            if (loggedUser.getAddress() != null) {
+                AddressDto addressDto = new AddressDto();
+                BeanUtils.copyProperties(loggedUser.getAddress(), addressDto);
+                userDto.setAddress(addressDto);
+            }
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new LoginResponseDto(HttpStatus.OK.getReasonPhrase(), userDto, jwtToken)
