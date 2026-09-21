@@ -1,0 +1,40 @@
+package com.easybytes.easystore.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "orders")
+public class Order extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id", nullable = false)
+    private Long orderId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> roles = new ArrayList<>();
+
+    @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalPrice;
+
+    @Column(name = "payment_id", nullable = false, length = 200)
+    private String paymentId;
+
+    @Column(name = "payment_status", nullable = false, length = 50)
+    private String paymentStatus;
+
+    @Column(name = "order_status", nullable = false, length = 50)
+    private String orderStatus;
+}
