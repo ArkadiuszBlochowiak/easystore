@@ -24,7 +24,7 @@ public class Order extends BaseEntity {
     private Customer customer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> roles = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
