@@ -31,7 +31,6 @@ public class GlobalExceptionHandler {
                 exception.getMessage(),
                 LocalDateTime.now()
         );
-//        return ResponseEntity.status(errorResponseDto.getErrorCode()).body(errorResponseDto);
         return new ResponseEntity<>(errorResponseDto, errorResponseDto.getErrorCode());
     }
 
@@ -54,5 +53,16 @@ public class GlobalExceptionHandler {
                         constraintViolation.getMessage()
                 ));
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(ResourceNotFoundException exception, WebRequest request) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                request.getDescription(false),
+                HttpStatus.NOT_FOUND,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, errorResponseDto.getErrorCode());
     }
 }
