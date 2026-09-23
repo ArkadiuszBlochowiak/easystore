@@ -1,6 +1,7 @@
 package com.easybytes.easystore.controller;
 
 import com.easybytes.easystore.constants.ApplicationConstants;
+import com.easybytes.easystore.dto.ContactResponseDto;
 import com.easybytes.easystore.dto.OrderResponseDto;
 import com.easybytes.easystore.dto.ResponseDto;
 import com.easybytes.easystore.entity.Order;
@@ -39,6 +40,19 @@ public class AdminController {
         Order cancelledOrder = iOrderService.updateOrderStatus(orderId, ApplicationConstants.ORDER_STATUS_CANCELLED);
         return ResponseEntity.ok(
                 new ResponseDto("200", "Order #" + cancelledOrder.getOrderId() + " has been cancelled.")
+        );
+    }
+
+    @GetMapping("/messages")
+    public ResponseEntity<List<ContactResponseDto>> getAllOpenMessages() {
+        return ResponseEntity.ok(iContactService.getAllOpenMessages());
+    }
+
+    @PatchMapping("/messages/{contactId}/close")
+    public ResponseEntity<ResponseDto> closeMessage(@PathVariable Long contactId) {
+        iContactService.updateMessageStatus(contactId, ApplicationConstants.CLOSED_MESSAGE);
+        return ResponseEntity.ok(
+                new ResponseDto("200", "Contact #" + contactId + " has been closed.")
         );
     }
 }

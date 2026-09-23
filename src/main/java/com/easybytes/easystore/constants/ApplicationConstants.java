@@ -9,6 +9,9 @@ public class ApplicationConstants {
     public static final String ORDER_STATUS_CONFIRMED = "CONFIRMED";
     public static final String ORDER_STATUS_CANCELLED = "CANCELLED";
 
+    public static final String OPEN_MESSAGE = "OPEN";
+    public static final String CLOSED_MESSAGE = "CLOSED";
+
     private ApplicationConstants() {
         throw new AssertionError("Utility class cannot be instantiated");
     }
