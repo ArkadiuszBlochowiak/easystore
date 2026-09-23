@@ -1,7 +1,9 @@
 package com.easybytes.easystore.service.impl;
 
 import com.easybytes.easystore.constants.ApplicationConstants;
+import com.easybytes.easystore.dto.OrderItemResponseDto;
 import com.easybytes.easystore.dto.OrderRequestDto;
+import com.easybytes.easystore.dto.OrderResponseDto;
 import com.easybytes.easystore.entity.Customer;
 import com.easybytes.easystore.entity.Order;
 import com.easybytes.easystore.entity.OrderItem;
@@ -54,10 +56,42 @@ public class OrderServiceImpl implements IOrderService {
         orderRepository.save(order);
     }
 
+    @Override
+    public List<OrderResponseDto> getCustomerOrders() {
+        Customer customer = getAuthenticatedCustomer();
+        List<Order> orders = orderRepository.findByCustomerOrderByCreatedAtDesc(customer);
+        return orders.stream().map(this::mapToOrderResponseDto).toList();
+    }
+
     private Customer getAuthenticatedCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         return customerRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    private OrderResponseDto mapToOrderResponseDto(Order order) {
+        List<OrderItemResponseDto> itemsDto = order
+                .getOrderItems()
+                .stream()
+                .map(this::mapToOrderItemResponseDto)
+                .toList();
+
+        return new OrderResponseDto(
+                order.getOrderId(),
+                order.getOrderStatus(),
+                order.getTotalPrice(),
+                order.getCreatedAt().toString(),
+                itemsDto
+        );
+    }
+
+    private OrderItemResponseDto mapToOrderItemResponseDto(OrderItem orderItem) {
+        return new OrderItemResponseDto(
+                orderItem.getProduct().getName(),
+                orderItem.getQuantity(),
+                orderItem.getPrice(),
+                orderItem.getProduct().getImageUrl()
+        );
     }
 }
