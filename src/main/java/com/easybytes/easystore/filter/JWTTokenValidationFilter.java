@@ -2,6 +2,7 @@ package com.easybytes.easystore.filter;
 
 import com.easybytes.easystore.constants.ApplicationConstants;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
@@ -56,6 +57,10 @@ public class JWTTokenValidationFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }
+            } catch (ExpiredJwtException exception) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token expired");
+                return;
             } catch (Exception exception) {
                 throw new BadCredentialsException("Invalid Token received!");
             }
