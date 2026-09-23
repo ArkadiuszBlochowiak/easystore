@@ -63,6 +63,12 @@ public class OrderServiceImpl implements IOrderService {
         return orders.stream().map(this::mapToOrderResponseDto).toList();
     }
 
+    @Override
+    public List<OrderResponseDto> getAllPendingOrders() {
+        List<Order> orders = orderRepository.findByOrderStatus(ApplicationConstants.ORDER_STATUS_CREATED);
+        return orders.stream().map(this::mapToOrderResponseDto).toList();
+    }
+
     private Customer getAuthenticatedCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();

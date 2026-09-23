@@ -9,4 +9,6 @@ public interface IOrderService {
     void createOrder(OrderRequestDto orderRequest);
 
     List<OrderResponseDto> getCustomerOrders();
+
+    List<OrderResponseDto> getAllPendingOrders();
 }
